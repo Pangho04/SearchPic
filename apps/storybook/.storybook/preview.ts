@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react';
 import '@searchpic/ui/styles.css';
+import './preview.css';
 
 const preview: Preview = {
   parameters: {

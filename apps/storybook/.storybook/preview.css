@@ -1,0 +1,5 @@
+/* MainButton 호버/클릭 시 배경 색상 */
+.sb-button-state-hover button,
+.sb-button-state-pressed button {
+  background-color: rgba(17, 17, 17, 0.8) !important;
+}
