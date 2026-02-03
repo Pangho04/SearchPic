@@ -7,7 +7,7 @@ type Props = {
   color?: string;
   align?: 'left' | 'center' | 'right';
   whitespace?: 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap';
-  wordBreak?: 'normal' | 'break-all' | 'break-word';
+  wordBreak?: 'normal' | 'break-all' | 'break-word' | 'break-keep';
   additionalClasses?: string;
 };
 
@@ -27,8 +27,9 @@ function TextLabel({
     normal: 'break-normal',
     'break-all': 'break-all',
     'break-word': 'break-words',
+    'break-keep': 'break-keep',
   } as const;
-  const breakClass = breakClassMap[wordBreak] ?? 'break-normal';
+  const breakClass = breakClassMap[wordBreak ?? 'normal'] ?? 'break-normal';
 
   const whitespaceClassMap: Record<NonNullable<Props['whitespace']>, string> = {
     normal: 'whitespace-normal',
@@ -39,11 +40,40 @@ function TextLabel({
   };
   const whitespaceClass = whitespaceClassMap[whitespace];
 
-  const baseStyles = tw`relative flex-1 font-sans text-${align} text-[${size}] font-${weight} ${textSpacing} text-[${color}] ${whitespaceClass} ${breakClass}`;
+  const weightClassMap: Record<NonNullable<Props['weight']>, string> = {
+    normal: 'font-normal',
+    medium: 'font-medium',
+    semibold: 'font-semibold',
+    bold: 'font-bold',
+  };
+  const weightClass = weightClassMap[weight];
+
+  const alignClassMap: Record<NonNullable<Props['align']>, string> = {
+    left: 'text-left',
+    center: 'text-center',
+    right: 'text-right',
+  };
+  const alignClass = alignClassMap[align ?? 'center'];
+
+  const baseStyles = tw`relative flex-1 font-sans ${alignClass} ${weightClass} text-[length:var(--text-label-size,15px)] text-[color:var(--text-label-color,#ffffff)] ${textSpacing} ${whitespaceClass} ${breakClass}`;
 
   const classes = [baseStyles, additionalClasses].filter(Boolean).join(' ');
 
-  return <div className={classes}>{text}</div>;
+  const colorValue = color.startsWith('#') ? color : `#${color}`;
+
+  return (
+    <div
+      className={classes}
+      style={
+        {
+          '--text-label-size': size,
+          '--text-label-color': colorValue,
+        } as React.CSSProperties
+      }
+    >
+      {text}
+    </div>
+  );
 }
 
 export default TextLabel;

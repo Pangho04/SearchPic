@@ -34,9 +34,9 @@ const meta: Meta<typeof TextLabel> = {
     },
     wordBreak: {
       control: 'select',
-      options: ['normal', 'break-all', 'break-word'],
+      options: ['normal', 'break-all', 'break-word', 'break-keep'],
       table: {
-        type: { summary: 'normal | break-all | break-word' },
+        type: { summary: 'normal | break-all | break-word | break-keep' },
       },
     },
     additionalClasses: {
