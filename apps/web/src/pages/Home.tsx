@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header>
-        <TextLabel text={homeStrings.header.name} color="#1A1A1A" weight="medium" />
+        <TextLabel text={homeStrings.header.content} color="#1A1A1A" weight="medium" />
       </Header>
       <main className="relative flex flex-1 flex-row items-center justify-center gap-2.5 self-stretch p-2.5">
         <TextLabel
