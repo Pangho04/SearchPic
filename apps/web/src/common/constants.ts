@@ -12,4 +12,10 @@ export const STRINGS = {
       buttonText: '다음',
     },
   },
+  result: {
+    header: {
+      content: APPLICANT_NAME,
+    },
+    buttonText: '이전',
+  },
 };
