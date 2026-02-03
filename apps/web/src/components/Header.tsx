@@ -5,12 +5,10 @@ type Props = {
 export default function Header({ children }: Props) {
   return (
     <header
-      className="flex flex-row items-center justify-center self-stretch shrink-0 relative overflow-hidden font-sans font-medium h-[52px] py-[17px] px-[20px]"
+      className="relative flex h-[52px] shrink-0 flex-row items-center justify-center self-stretch overflow-hidden px-[20px] py-[17px] font-sans font-medium"
       role="banner"
     >
-      <div className="relative flex-1 text-center font-sans font-medium text-[15px] leading-[1.4] tracking-[-0.02em]">
-        {children}
-      </div>
+      {children}
     </header>
   );
 }
