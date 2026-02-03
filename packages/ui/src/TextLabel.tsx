@@ -15,7 +15,7 @@ function TextLabel({
   text,
   size = '15px',
   weight = 'normal',
-  color = 'ffffff',
+  color = '#111111',
   align = 'center',
   whitespace = 'pre-line',
   wordBreak = 'normal',
