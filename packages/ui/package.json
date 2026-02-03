@@ -43,6 +43,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "daisyui": "^5.5.17"
+    "daisyui": "^5.5.17",
+    "tailwind-merge": "^3.4.0"
   }
 }
