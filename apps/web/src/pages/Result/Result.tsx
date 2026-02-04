@@ -6,6 +6,7 @@ import { RootPath } from '@/router/Paths';
 import { Header, LinkLabel } from '@/components';
 import { tw } from '@/tw';
 import { useStore } from '@/common/store';
+import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
 import MaskLayer from './components/MaskLayer';
 
 const formatNumber = (n: number | undefined) => {
@@ -18,6 +19,7 @@ export default function Result() {
   const navigate = useNavigate();
 
   const searchResult = useStore((state) => state.searchResult);
+  const { isLoading } = useSearchResultQuery();
 
   const resultStrings = SCENE_STRINGS.result;
 
@@ -91,50 +93,69 @@ export default function Result() {
         </Header>
 
         <div className="flex w-full flex-1 flex-col items-stretch justify-start gap-10 lg:min-h-0 lg:flex-row lg:items-center">
-          {/** 콘텐츠 이미지 영역 */}
+          {/** 이미지 영역 */}
           <div className="aspect-3/2 relative flex h-full shrink-0 flex-col items-start justify-start gap-2.5 overflow-hidden px-5 lg:flex-1">
-            <ImageView
-              src={searchResult?.download_url ?? ''}
-              alt="result-image"
-              width="responsive"
-              height="responsive"
-              radius={24}
-              scaleType="cover"
-              ratio="3:2"
-              additionalContainerClasses="w-full max-h-full shrink-0 self-stretch"
-              additionalImageClasses="h-full w-full object-cover"
-            />
+            {isLoading ? (
+              <div className="skeleton h-full w-full shrink-0 self-stretch rounded-3xl" />
+            ) : (
+              <ImageView
+                src={searchResult?.download_url ?? ''}
+                alt="result-image"
+                width="responsive"
+                height="responsive"
+                radius={24}
+                scaleType="cover"
+                ratio="3:2"
+                additionalContainerClasses="w-full max-h-full shrink-0 self-stretch"
+                additionalImageClasses="h-full w-full object-cover"
+              />
+            )}
           </div>
 
           {/** 정보 카드 영역 */}
           <div className="relative flex min-h-0 flex-1 flex-col items-start justify-start gap-[60px] px-5 lg:items-center lg:justify-center">
-            <div className="relative flex shrink-0 flex-col items-center justify-center gap-3 self-stretch">
-              {cardGroups.map((card) => (
-                <div
-                  key={card.id}
-                  className={cardClassName}
-                  style={{
-                    flexDirection: card.id === 'links' ? 'column' : undefined,
-                  }}
-                >
-                  {card.fields.map((field) => (
-                    <div key={field.label} className={fieldClassName}>
-                      <TextLabel text={field.label} {...labelProps} />
-                      {field.isLink ? (
-                        <LinkLabel
-                          href={'href' in field ? field.href : undefined}
-                          text={field.value}
-                          {...valueProps}
-                        />
-                      ) : (
-                        <TextLabel text={field.value} {...valueProps} />
-                      )}
+            <div className="relative flex w-full shrink-0 flex-col items-center justify-center gap-3 self-stretch">
+              {isLoading
+                ? [1, 2, 3].map((cardIdx) => (
+                    <div
+                      key={cardIdx}
+                      className={cardClassName}
+                      style={{
+                        flexDirection: cardIdx === 3 ? 'column' : undefined,
+                      }}
+                    >
+                      {[1, 2].map((fieldIdx) => (
+                        <div key={fieldIdx} className={fieldClassName}>
+                          <div className="skeleton h-4 w-12 shrink-0 rounded" />
+                          <div className="skeleton h-4 w-24 shrink-0 rounded opacity-50" />
+                        </div>
+                      ))}
+                    </div>
+                  ))
+                : cardGroups.map((card) => (
+                    <div
+                      key={card.id}
+                      className={cardClassName}
+                      style={{
+                        flexDirection: card.id === 'links' ? 'column' : undefined,
+                      }}
+                    >
+                      {card.fields.map((field) => (
+                        <div key={field.label} className={fieldClassName}>
+                          <TextLabel text={field.label} {...labelProps} />
+                          {field.isLink ? (
+                            <LinkLabel
+                              href={'href' in field ? field.href : undefined}
+                              text={field.value}
+                              {...valueProps}
+                            />
+                          ) : (
+                            <TextLabel text={field.value} {...valueProps} />
+                          )}
+                        </div>
+                      ))}
                     </div>
                   ))}
-                </div>
-              ))}
-
-              {/** 버튼 영역 */}
               <MainButton
                 text={resultStrings.buttonText}
                 styleTheme="primary"
