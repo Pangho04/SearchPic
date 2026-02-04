@@ -12,11 +12,12 @@ const meta: Meta<typeof MainButton> = {
         type: { summary: 'primary | secondary' },
       },
     },
+    loading: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     additionalClasses: {
       control: 'text',
       description: '추가로 적용할 Tailwind CSS 클래스를 입력합니다.',
     },
-    disabled: { control: 'boolean' },
   },
 };
 export default meta;

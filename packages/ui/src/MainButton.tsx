@@ -4,6 +4,7 @@ type StyleTheme = 'primary' | 'secondary';
 
 type Props = {
   text: string;
+  loading?: boolean;
   styleTheme?: StyleTheme;
   additionalClasses?: string;
   disabled?: boolean;
@@ -20,6 +21,7 @@ const variantStyles: Record<StyleTheme, string> = {
 
 function MainButton({
   text,
+  loading = false,
   styleTheme = 'primary',
   additionalClasses = '',
   disabled = false,
@@ -38,7 +40,7 @@ function MainButton({
       onMouseDown={onMouseDown}
       disabled={disabled}
     >
-      {text}
+      {loading ? <span className="loading loading-spinner loading-md" /> : text}
     </button>
   );
 }
