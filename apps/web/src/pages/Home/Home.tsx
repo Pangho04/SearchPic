@@ -1,14 +1,30 @@
 import { MainButton, TextLabel } from '@searchpic/ui';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { SCENE_STRINGS } from '@/common/constants';
 import { Header, Footer } from '@/components';
 import { ResultPath } from '@/router/Paths';
+import { useStore } from '@/common/store';
 import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchResult = useStore((state) => state.searchResult);
   const { refetch } = useSearchResultQuery({ enabled: false });
 
   const homeStrings = SCENE_STRINGS.home;
+
+  /**
+   * @when 화면 진입 시
+   * @expect 검색 결과가 존재할 경우, 결과 페이지로 이동합니다.
+   * @clear -
+   */
+  useEffect(() => {
+    if (searchResult && location.state?.prevPath !== 'result') {
+      navigate(ResultPath);
+    }
+  }, [navigate, searchResult, location.state?.prevPath]);
 
   const handleClickNextBtn = () => {
     refetch();

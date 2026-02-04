@@ -81,7 +81,7 @@ export default function Result() {
   ];
 
   const handleClickPrevBtn = () => {
-    navigate(RootPath);
+    navigate(RootPath, { state: { prevPath: 'result' } });
   };
 
   return (
