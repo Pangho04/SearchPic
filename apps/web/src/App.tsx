@@ -1,11 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
 import RouteContainer from './router/RouteContainer';
+import { QueryProvider } from './common/services/query';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/*" element={<RouteContainer />} />
-    </Routes>
+    <QueryProvider>
+      <Routes>
+        <Route path="/*" element={<RouteContainer />} />
+      </Routes>
+    </QueryProvider>
   );
 }
 
