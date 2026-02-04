@@ -1,17 +1,22 @@
 import { MainButton, TextLabel } from '@searchpic/ui';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SCENE_STRINGS } from '@/common/constants';
 import { Header, Footer } from '@/components';
 import { ResultPath } from '@/router/Paths';
 import { useStore } from '@/common/store';
 import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
 
+const THROTTLE_MS = 500;
+
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchResult = useStore((state) => state.searchResult);
   const { refetch } = useSearchResultQuery({ enabled: false });
+
+  const [isThrottled, setIsThrottled] = useState(false);
+  const throttleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const homeStrings = SCENE_STRINGS.home;
 
@@ -26,10 +31,31 @@ export default function Home() {
     }
   }, [navigate, searchResult, location.state?.prevPath]);
 
+  useEffect(
+    () => () => {
+      if (throttleTimeoutRef.current != null) {
+        clearTimeout(throttleTimeoutRef.current);
+      }
+    },
+    []
+  );
+
   const handleClickNextBtn = () => {
-    refetch();
-    navigate(ResultPath, { state: { fromHomeClick: true } });
+    if (isThrottled) return;
+
+    setIsThrottled(true);
+
+    // Throttle UI 표시를 위해 지연 시간을 항상 기다립니다.
+    throttleTimeoutRef.current = setTimeout(() => {
+      refetch();
+      navigate(ResultPath, { state: { fromHomeClick: true } });
+
+      setIsThrottled(false);
+      throttleTimeoutRef.current = null;
+    }, THROTTLE_MS);
   };
+
+  const buttonAdditionalClasses = 'w-full lg:text-base md:w-[335px]';
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -48,8 +74,10 @@ export default function Home() {
       <Footer>
         <MainButton
           text={homeStrings.footer.buttonText}
+          loading={isThrottled}
+          disabled={isThrottled}
           onClick={handleClickNextBtn}
-          additionalClasses="w-full lg:text-base md:w-[335px]"
+          additionalClasses={buttonAdditionalClasses}
         />
       </Footer>
     </div>
