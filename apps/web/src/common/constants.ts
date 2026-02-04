@@ -1,6 +1,6 @@
 export const APPLICANT_NAME = '이창호';
 
-export const STRINGS = {
+export const SCENE_STRINGS = {
   home: {
     header: {
       content: APPLICANT_NAME,
@@ -15,6 +15,16 @@ export const STRINGS = {
   result: {
     header: {
       content: APPLICANT_NAME,
+    },
+    label: {
+      title: {
+        id: 'id',
+        author: 'author',
+        width: 'width',
+        height: 'height',
+        url: 'url',
+        download_url: 'download_url',
+      },
     },
     buttonText: '이전',
   },
