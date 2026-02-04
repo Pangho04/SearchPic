@@ -1,13 +1,13 @@
 import { MainButton, TextLabel } from '@searchpic/ui';
 import { useNavigate } from 'react-router-dom';
-import { STRINGS } from '@/common/constants';
+import { SCENE_STRINGS } from '@/common/constants';
 import { Header, Footer } from '@/components';
 import { ResultPath } from '@/router/Paths';
 
 export default function Home() {
   const navigate = useNavigate();
 
-  const homeStrings = STRINGS.home;
+  const homeStrings = SCENE_STRINGS.home;
 
   const handleClickNextBtn = () => {
     navigate(ResultPath);

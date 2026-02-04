@@ -1,5 +1,5 @@
-import Home from '@/pages/Home';
-import Result from '@/pages/Result';
+import Home from '@/pages/Home/Home';
+import Result from '@/pages/Result/Result';
 import { Route, Routes } from 'react-router-dom';
 import { ResultPath, RootPath } from './Paths';
 
