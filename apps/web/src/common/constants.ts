@@ -26,6 +26,10 @@ export const SCENE_STRINGS = {
         download_url: 'download_url',
       },
     },
+    alert: {
+      title: '안내',
+      content: '조회 이력이 없어, 1초 뒤 메인 페이지로 이동합니다.',
+    },
     buttonText: '이전',
   },
 };

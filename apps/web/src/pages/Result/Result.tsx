@@ -1,4 +1,5 @@
 import { ImageView, MainButton, TextLabel } from '@searchpic/ui';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SCENE_STRINGS } from '@/common/constants';
 import { RootPath } from '@/router/Paths';
@@ -7,7 +8,10 @@ import { Header, LinkLabel } from '@/components';
 import { tw } from '@/tw';
 import { useStore } from '@/common/store';
 import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
+import { useAlertContext } from '@/common/providers/useAlertContext';
 import MaskLayer from './components/MaskLayer';
+
+const REDIRECT_DELAY_MS = 1000;
 
 const formatNumber = (n: number | undefined) => {
   if (n === undefined || Number.isNaN(n)) return '-';
@@ -19,9 +23,42 @@ export default function Result() {
   const navigate = useNavigate();
 
   const searchResult = useStore((state) => state.searchResult);
+
   const { isLoading, isSuccess } = useSearchResultQuery({
     enabled: false,
   });
+
+  const { showAlert, closeAlert } = useAlertContext();
+
+  /**
+   * @when 화면 진입 시
+   * @expect 조회 이력 없이 /result 진입 시 1초 뒤 메인으로 이동합니다.
+   * @clear timeout을 제거하고, 얼럿 모달을 닫습니다.
+   */
+  useEffect(() => {
+    if (isLoading || isSuccess) return undefined;
+
+    const alertId = showAlert({
+      title: SCENE_STRINGS.result.alert.title,
+      children: (
+        <TextLabel
+          text={SCENE_STRINGS.result.alert.content}
+          color="#111111"
+          weight="medium"
+          size="18px"
+        />
+      ),
+    });
+
+    const timeoutId = setTimeout(() => {
+      navigate(RootPath);
+    }, REDIRECT_DELAY_MS);
+
+    return () => {
+      clearTimeout(timeoutId);
+      closeAlert(alertId);
+    };
+  }, [isLoading, isSuccess, navigate, showAlert, closeAlert]);
 
   const resultStrings = SCENE_STRINGS.result;
 
