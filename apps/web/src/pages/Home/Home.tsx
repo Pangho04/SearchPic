@@ -1,16 +1,18 @@
 import { MainButton, TextLabel } from '@searchpic/ui';
-import { useNavigate } from 'react-router-dom';
 import { SCENE_STRINGS } from '@/common/constants';
 import { Header, Footer } from '@/components';
 import { ResultPath } from '@/router/Paths';
+import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { refetch } = useSearchResultQuery({ enabled: false });
 
   const homeStrings = SCENE_STRINGS.home;
 
   const handleClickNextBtn = () => {
-    navigate(ResultPath);
+    refetch();
+    navigate(ResultPath, { state: { fromHomeClick: true } });
   };
 
   return (

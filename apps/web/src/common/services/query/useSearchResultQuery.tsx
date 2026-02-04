@@ -4,12 +4,19 @@ import { useStore } from '@/common/store';
 import { getResult } from '../api/result/result.client';
 import { searchResultKeys } from './keys';
 
-function useSearchResultQuery() {
+interface UseSearchResultQueryOptions {
+  /** false면 조회를 수행하지 않음 (조회 이력 없이 /result 진입 시 사용) */
+  enabled?: boolean;
+}
+
+function useSearchResultQuery(options: UseSearchResultQueryOptions = {}) {
+  const { enabled = true } = options;
   const setSearchResult = useStore((s) => s.setSearchResult);
 
   const query = useQuery({
     queryKey: [...searchResultKeys.current],
     queryFn: () => getResult('0'),
+    enabled,
   });
 
   /**

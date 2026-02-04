@@ -19,7 +19,9 @@ export default function Result() {
   const navigate = useNavigate();
 
   const searchResult = useStore((state) => state.searchResult);
-  const { isLoading } = useSearchResultQuery();
+  const { isLoading, isSuccess } = useSearchResultQuery({
+    enabled: false,
+  });
 
   const resultStrings = SCENE_STRINGS.result;
 
@@ -95,7 +97,7 @@ export default function Result() {
         <div className="flex w-full flex-1 flex-col items-stretch justify-start gap-10 lg:min-h-0 lg:flex-row lg:items-center">
           {/** 이미지 영역 */}
           <div className="aspect-3/2 relative flex h-full shrink-0 flex-col items-start justify-start gap-2.5 overflow-hidden px-5 lg:flex-1">
-            {isLoading ? (
+            {isLoading || !isSuccess ? (
               <div className="skeleton h-full w-full shrink-0 self-stretch rounded-3xl" />
             ) : (
               <ImageView
@@ -115,7 +117,7 @@ export default function Result() {
           {/** 정보 카드 영역 */}
           <div className="relative flex min-h-0 flex-1 flex-col items-start justify-start gap-[60px] px-5 lg:items-center lg:justify-center">
             <div className="relative flex w-full shrink-0 flex-col items-center justify-center gap-3 self-stretch">
-              {isLoading
+              {isLoading || !isSuccess
                 ? [1, 2, 3].map((cardIdx) => (
                     <div
                       key={cardIdx}
