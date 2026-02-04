@@ -46,7 +46,11 @@ export default function Home() {
         />
       </main>
       <Footer>
-        <MainButton text={homeStrings.footer.buttonText} onClick={handleClickNextBtn} />
+        <MainButton
+          text={homeStrings.footer.buttonText}
+          onClick={handleClickNextBtn}
+          additionalClasses="w-full lg:text-base md:w-[335px]"
+        />
       </Footer>
     </div>
   );
