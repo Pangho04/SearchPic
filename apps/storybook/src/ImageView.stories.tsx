@@ -44,7 +44,7 @@ export default meta;
 
 type Story = StoryObj<typeof ImageView>;
 
-/** 기본 텍스트 스타일 */
+/** 기본 이미지 스타일 */
 export const Default: Story = {
   args: {
     src: 'https://picsum.photos/id/0/5000/3333',
