@@ -24,11 +24,13 @@ export default function Result() {
 
   const searchResult = useStore((state) => state.searchResult);
 
-  const { isLoading, isSuccess } = useSearchResultQuery({
+  const { isLoading, isSuccess, error } = useSearchResultQuery({
     enabled: false,
   });
 
   const { showAlert, closeAlert } = useAlertContext();
+
+  const resultStrings = SCENE_STRINGS.result;
 
   /**
    * @when 화면 진입 시
@@ -36,18 +38,13 @@ export default function Result() {
    * @clear timeout을 제거하고, 얼럿 모달을 닫습니다.
    */
   useEffect(() => {
-    if (isLoading || isSuccess) return undefined;
+    if (isLoading || isSuccess || error) return undefined;
+
+    const alertText = resultStrings.alert.noRecord;
 
     const alertId = showAlert({
-      title: SCENE_STRINGS.result.alert.title,
-      children: (
-        <TextLabel
-          text={SCENE_STRINGS.result.alert.content}
-          color="#111111"
-          weight="medium"
-          size="18px"
-        />
-      ),
+      title: alertText.title,
+      children: <TextLabel text={alertText.content} color="#111111" weight="medium" size="18px" />,
     });
 
     const timeoutId = setTimeout(() => {
@@ -58,9 +55,46 @@ export default function Result() {
       clearTimeout(timeoutId);
       closeAlert(alertId);
     };
-  }, [isLoading, isSuccess, navigate, showAlert, closeAlert]);
+  }, [isLoading, isSuccess, error, navigate, showAlert, closeAlert, resultStrings.alert.noRecord]);
 
-  const resultStrings = SCENE_STRINGS.result;
+  /**
+   * @when 결과 조회 실패 시
+   * @expect 에러 메시지를 표시합니다.
+   * @clear -
+   */
+  useEffect(() => {
+    if (!error || (searchResult && isSuccess)) return undefined;
+
+    const alertText = resultStrings.alert.noResponse;
+
+    const alertId = showAlert({
+      title: alertText.title,
+      children: (
+        <TextLabel
+          text={`${alertText.content}\n(${error?.message ?? '알 수 없는 에러'})`}
+          color="#111111"
+          weight="medium"
+          size="18px"
+        />
+      ),
+      buttons: [
+        {
+          text: alertText.buttonText1,
+          onClick: () => navigate(RootPath),
+        },
+      ],
+    });
+
+    return () => closeAlert(alertId);
+  }, [
+    error,
+    showAlert,
+    closeAlert,
+    searchResult,
+    isSuccess,
+    navigate,
+    resultStrings.alert.noResponse,
+  ]);
 
   const cardClassName = tw`flex flex-col gap-4 self-stretch rounded-2xl border border-solid border-[rgba(0,0,0,0.01)] bg-[#ffffff] p-5 md:relative md:shrink-0 md:flex-row`;
   const fieldClassName = tw`md: flex flex-1 flex-col items-start gap-0 self-stretch`;

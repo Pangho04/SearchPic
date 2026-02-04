@@ -27,8 +27,15 @@ export const SCENE_STRINGS = {
       },
     },
     alert: {
-      title: '안내',
-      content: '조회 이력이 없어, 1초 뒤 메인 페이지로 이동합니다.',
+      noRecord: {
+        title: '안내',
+        content: '조회 이력이 없어, 1초 뒤 메인 페이지로 이동합니다.',
+      },
+      noResponse: {
+        title: '에러',
+        content: '조회 결과를 불러오는데 실패했습니다.\n 메인 페이지로 이동합니다.',
+        buttonText1: '이동',
+      },
     },
     buttonText: '이전',
   },
