@@ -1,0 +1,5 @@
+{
+  "API": {
+    "GET_RESULT": { "method": "GET", "path": "/id/{id}/info" }
+  }
+}
