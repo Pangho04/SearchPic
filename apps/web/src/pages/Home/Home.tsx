@@ -1,19 +1,23 @@
 import { MainButton, TextLabel } from '@searchpic/ui';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { SCENE_STRINGS } from '@/common/constants';
 import { Header, Footer } from '@/components';
 import { ResultPath } from '@/router/Paths';
 import { useStore } from '@/common/store';
 import useSearchResultQuery from '@/common/services/query/useSearchResultQuery';
+import { searchResultKeys } from '@/common/services/query/keys';
+import { getResult } from '@/common/services/api/result/result.client';
 
 const THROTTLE_MS = 500;
 
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   const searchResult = useStore((state) => state.searchResult);
-  const { refetch } = useSearchResultQuery({ enabled: false });
+  useSearchResultQuery({ enabled: false });
 
   const [isThrottled, setIsThrottled] = useState(false);
   const throttleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,7 +51,10 @@ export default function Home() {
 
     // Throttle UI 표시를 위해 지연 시간을 항상 기다립니다.
     throttleTimeoutRef.current = setTimeout(() => {
-      refetch();
+      queryClient.fetchQuery({
+        queryKey: searchResultKeys.current,
+        queryFn: () => getResult('0'),
+      });
       navigate(ResultPath, { state: { fromHomeClick: true } });
 
       setIsThrottled(false);
