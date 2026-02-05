@@ -69,3 +69,12 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+/** 버튼 로딩 중 스타일 */
+export const Loading: Story = {
+  args: {
+    text: 'Text',
+    disabled: true,
+    loading: true,
+  },
+};
