@@ -16,7 +16,7 @@ const baseStyles = tw`relative flex w-full flex-row items-center justify-center 
 
 const variantStyles: Record<StyleTheme, string> = {
   primary: tw`bg-[#111111] text-[#ffffff] hover:bg-[rgba(17,17,17,0.80)] active:bg-[rgba(17,17,17,0.80)]`,
-  secondary: tw`border-[#111111] bg-transparent text-[#111111] hover:bg-[#111111] hover:text-[#ffffff] active:bg-[#111111] active:text-[#ffffff]`,
+  secondary: tw`border border-[#111111] bg-[#ffffff] text-[#111111] hover:bg-[rgba(17,17,17,0.06)] active:bg-[rgba(17,17,17,0.10)]`,
 };
 
 function MainButton({
