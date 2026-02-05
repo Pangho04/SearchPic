@@ -49,15 +49,15 @@ export default function Home() {
 
     setIsThrottled(true);
 
-    // Throttle UI 표시를 위해 지연 시간을 항상 기다립니다.
-    throttleTimeoutRef.current = setTimeout(() => {
-      queryClient.fetchQuery({
-        queryKey: searchResultKeys.current,
-        queryFn: () => getResult('0'),
-      });
-      navigate(ResultPath, { state: { fromHomeClick: true } });
+    queryClient.fetchQuery({
+      queryKey: searchResultKeys.current,
+      queryFn: () => getResult('0'),
+    });
+    navigate(ResultPath, { state: { fromHomeClick: true } });
 
+    throttleTimeoutRef.current = setTimeout(() => {
       setIsThrottled(false);
+
       throttleTimeoutRef.current = null;
     }, THROTTLE_MS);
   };
